@@ -1,0 +1,33 @@
+version: '3'
+services:
+  logistica1:
+    build: .
+    ports:
+      - "5003:5003"
+    environment:
+      POSTGRES_URL: postgresql+psycopg2://admin:admin@offersdb:5432/OffersDB
+      SECRET_KEY: nativa2023
+      AMBIENTE: produccion
+      USERS_MS: users-ms:5000
+    restart: always
+    depends_on:
+      - offersdb
+    networks:
+      - offers_network
+      - app_network
+  offersdb:
+    image: postgres
+    environment:
+      POSTGRES_DB: OffersDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5436:5432"
+    networks:
+      - offers_network
+
+networks:
+  offers_network:
+    driver: bridge
+  app_network:
+    driver: bridge
